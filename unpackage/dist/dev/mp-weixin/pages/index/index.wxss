@@ -1,0 +1,83 @@
+
+.calendar-content {
+		padding: 20px;
+}
+.example-body {
+
+		display: flex;
+
+		flex-direction: row;
+}
+.container {
+		padding: 10px;
+}
+#editor {
+		width: 100%;
+		height: 300px;
+		background-color: #CCCCCC;
+}
+button {
+		margin-top: 10px;
+		width: 100px;
+}
+.btn-div {
+		display: flex;
+		flex-direction: row;
+}
+.info-card {
+		width: 100%;
+		height: 150px;
+		border-radius: 6px;
+		background: #ebb9a3;
+		padding: 20px;
+		font-size: 14px;
+		box-sizing: border-box;
+		position: relative;
+		white-space: pre-wrap;
+		margin-top: 20px;
+}
+.sub-btn {
+		background-color: #f99475;
+		border-radius: 2px;
+		color: #ffffff;
+}
+
+	/**
+	 * 叉号
+	 */
+.cross {
+		display: block;
+		width: 60px;
+		height: 60px;
+		position: absolute;
+		top: 0;
+		right: 0;
+}
+.cross::before,
+	.cross::after {
+		content: "";
+		width: 16px;
+		height: 2px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin: -1px 0 0 -8px;
+		transform: rotate(45deg);
+		border-radius: 2px;
+		background-color: #9da2a8;
+}
+.cross::after {
+		transform: rotate(-45deg);
+}
+
+	/**
+	 * 叉号 end
+	 */
+.exit {
+		position: absolute;
+		top: 0;
+		right: 10px;
+		z-index: 5;
+		width: 30px;
+		height: 30px;
+}

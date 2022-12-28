@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "calendar-item": "./uni-calendar-item",
+    "swiper-direct-com": "../../../../componment/swiper-direct-com/swiper-direct-com"
+  }
+}

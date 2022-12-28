@@ -1,0 +1,1 @@
+<view class="wrapper" bindtouchstart="{{a}}" bindtouchend="{{b}}"><slot></slot></view>

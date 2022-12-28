@@ -4,6 +4,7 @@ class Calendar {
 	constructor({
 		date,
 		selected,
+		trip,
 		startDate,
 		endDate,
 		range
@@ -12,6 +13,8 @@ class Calendar {
 		this.date = this.getDate(new Date()) // 当前初入日期
 		// 打点信息
 		this.selected = selected || [];
+		// trip 打点
+		this.trip = trip || [];
 		// 范围开始
 		this.startDate = startDate
 		// 范围结束
@@ -128,7 +131,14 @@ class Calendar {
 			// 是否今天
 			let isDay = fullDate === nowDate
 			// 获取打点信息
+
 			let info = this.selected && this.selected.find((item) => {
+				if (this.dateEqual(nowDate, item.date)) {
+					return item
+				}
+			})
+
+			let tripInfo = this.trip && this.trip.find((item) => {
 				if (this.dateEqual(nowDate, item.date)) {
 					return item
 				}
@@ -175,6 +185,10 @@ class Calendar {
 			}
 			if (info) {
 				data.extraInfo = info
+			}
+
+			if (tripInfo) {
+				data.tripExtraInfo = tripInfo;
 			}
 
 			dateArr.push(data)
@@ -276,6 +290,15 @@ class Calendar {
 	}
 
 	/**
+	 *  设置trip 打点
+	 */
+
+	setTripInfo(data, value) {
+		this.trip = value
+		this._getWeek(data)
+	}
+
+	/**
 	 *  获取多选状态
 	 */
 	setMultiple(fullDate) {
@@ -295,9 +318,11 @@ class Calendar {
 			} else {
 				this.multipleStatus.after = fullDate
 				if (this.dateCompare(this.multipleStatus.before, this.multipleStatus.after)) {
-					this.multipleStatus.data = this.geDateAll(this.multipleStatus.before, this.multipleStatus.after);
+					this.multipleStatus.data = this.geDateAll(this.multipleStatus.before, this.multipleStatus
+						.after);
 				} else {
-					this.multipleStatus.data = this.geDateAll(this.multipleStatus.after, this.multipleStatus.before);
+					this.multipleStatus.data = this.geDateAll(this.multipleStatus.after, this.multipleStatus
+						.before);
 				}
 			}
 		}

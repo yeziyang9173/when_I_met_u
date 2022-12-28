@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "Mine",
+  "usingComponents": {
+    "uni-calendar": "../../uni_modules/uni-calendar/components/uni-calendar/uni-calendar",
+    "uni-easyinput": "../../uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput"
+  }
+}

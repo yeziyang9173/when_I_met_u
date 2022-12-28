@@ -1,73 +1,89 @@
 <template>
-	<view class="uni-calendar">
-		<view v-if="!insert&&show" class="uni-calendar__mask" :class="{'uni-calendar--mask-show':aniMaskShow}" @click="clean"></view>
-		<view v-if="insert || show" class="uni-calendar__content" :class="{'uni-calendar--fixed':!insert,'uni-calendar--ani-show':aniMaskShow}">
-			<view v-if="!insert" class="uni-calendar__header uni-calendar--fixed-top">
-				<view class="uni-calendar__header-btn-box" @click="close">
-					<text class="uni-calendar__header-text uni-calendar--fixed-width">{{cancelText}}</text>
+	<swiper-direct-com :lrDistance="5" leftMed="scrollL" rightMed="scrollR" @scrollL="scrollL" @scrollR="scrollR">
+		<view class="uni-calendar">
+			<view v-if="!insert&&show" class="uni-calendar__mask" :class="{'uni-calendar--mask-show':aniMaskShow}"
+				@click="clean"></view>
+			<view v-if="insert || show" class="uni-calendar__content"
+				:class="{'uni-calendar--fixed':!insert,'uni-calendar--ani-show':aniMaskShow}">
+				<view v-if="!insert" class="uni-calendar__header uni-calendar--fixed-top">
+					<view class="uni-calendar__header-btn-box" @click="close">
+						<text class="uni-calendar__header-text uni-calendar--fixed-width">{{cancelText}}</text>
+					</view>
+					<view class="uni-calendar__header-btn-box" @click="confirm">
+						<text class="uni-calendar__header-text uni-calendar--fixed-width">{{okText}}</text>
+					</view>
 				</view>
-				<view class="uni-calendar__header-btn-box" @click="confirm">
-					<text class="uni-calendar__header-text uni-calendar--fixed-width">{{okText}}</text>
-				</view>
-			</view>
-			<view class="uni-calendar__header">
-				<view class="uni-calendar__header-btn-box" @click.stop="pre">
-					<view class="uni-calendar__header-btn uni-calendar--left"></view>
-				</view>
-				<picker mode="date" :value="date" fields="month" @change="bindDateChange">
-					<text class="uni-calendar__header-text">{{ (nowDate.year||'') +' / '+( nowDate.month||'')}}</text>
-				</picker>
-				<view class="uni-calendar__header-btn-box" @click.stop="next">
-					<view class="uni-calendar__header-btn uni-calendar--right"></view>
-				</view>
-				<text class="uni-calendar__backtoday" @click="backtoday">{{todayText}}</text>
+				<view class="uni-calendar__header">
 
-			</view>
-			<view class="uni-calendar__box">
-				<view v-if="showMonth" class="uni-calendar__box-bg">
-					<text class="uni-calendar__box-bg-text">{{nowDate.month}}</text>
+					<picker mode="date" :value="date" fields="month" @change="bindDateChange">
+
+						<text class='month-text'> {{( Month2Eng(nowDate.month)||'')}}</text>
+						<text class="uni-calendar__header-text">{{ (nowDate.year||'')}} </text>
+					</picker>
+
+					<view class='pre-next-div'>
+						<view class="uni-calendar__header-btn-box" @click.stop="pre">
+							<view class="uni-calendar__header-btn uni-calendar--left"></view>
+						</view>
+						<view class="uni-calendar__header-btn-box" @click.stop="next">
+							<view class="uni-calendar__header-btn uni-calendar--right"></view>
+						</view>
+					</view>
+
+					<!-- <text class="uni-calendar__backtoday" @click="backtoday">{{todayText}}</text> -->
+
 				</view>
-				<view class="uni-calendar__weeks">
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">{{SUNText}}</text>
+				<view class="uni-calendar__box">
+					<view v-if="showMonth" class="uni-calendar__box-bg">
+						<text class="uni-calendar__box-bg-text">{{nowDate.month}}</text>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">{{monText}}</text>
+					<view class="uni-calendar__weeks">
+						<view class="uni-calendar__weeks-day">
+							<text class="uni-calendar__weeks-day-text">{{SUNText}}</text>
+						</view>
+						<view class="uni-calendar__weeks-day">
+							<text class="uni-calendar__weeks-day-text">{{monText}}</text>
+						</view>
+						<view class="uni-calendar__weeks-day">
+							<text class="uni-calendar__weeks-day-text">{{TUEText}}</text>
+						</view>
+						<view class="uni-calendar__weeks-day">
+							<text class="uni-calendar__weeks-day-text">{{WEDText}}</text>
+						</view>
+						<view class="uni-calendar__weeks-day">
+							<text class="uni-calendar__weeks-day-text">{{THUText}}</text>
+						</view>
+						<view class="uni-calendar__weeks-day">
+							<text class="uni-calendar__weeks-day-text">{{FRIText}}</text>
+						</view>
+						<view class="uni-calendar__weeks-day">
+							<text class="uni-calendar__weeks-day-text">{{SATText}}</text>
+						</view>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">{{TUEText}}</text>
-					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">{{WEDText}}</text>
-					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">{{THUText}}</text>
-					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">{{FRIText}}</text>
-					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">{{SATText}}</text>
-					</view>
-				</view>
-				<view class="uni-calendar__weeks" v-for="(item,weekIndex) in weeks" :key="weekIndex">
-					<view class="uni-calendar__weeks-item" v-for="(weeks,weeksIndex) in item" :key="weeksIndex">
-						<calendar-item class="uni-calendar-item--hook" :weeks="weeks" :calendar="calendar" :selected="selected" :lunar="lunar" @change="choiceDate"></calendar-item>
+					<view class="uni-calendar__weeks" v-for="(item,weekIndex) in weeks" :key="weekIndex">
+						<view class="uni-calendar__weeks-item" v-for="(weeks,weeksIndex) in item" :key="weeksIndex">
+							<calendar-item class="uni-calendar-item--hook" :weeks="weeks" :calendar="calendar"
+								:trip="trip" :selected="selected" :lunar="lunar" @change="choiceDate"></calendar-item>
+						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-	</view>
+	</swiper-direct-com>
 </template>
 
 <script>
 	import Calendar from './util.js';
 	import calendarItem from './uni-calendar-item.vue'
+	import swiperDirectCom from '../../../../componment/swiper-direct-com/swiper-direct-com.vue'
+
 	import {
-	initVueI18n
+		initVueI18n
 	} from '@dcloudio/uni-i18n'
 	import messages from './i18n/index.js'
-	const {	t	} = initVueI18n(messages)
+	const {
+		t
+	} = initVueI18n(messages)
 	/**
 	 * Calendar 日历
 	 * @description 日历组件可以查看日期，选择任意范围内的日期，打点操作。常用场景如：酒店日期预订、火车机票选择购买日期、上下班打卡等
@@ -90,15 +106,22 @@
 	 */
 	export default {
 		components: {
-			calendarItem
+			calendarItem,
+			swiperDirectCom
 		},
-		emits:['close','confirm','change','monthSwitch'],
+		emits: ['close', 'confirm', 'change', 'monthSwitch'],
 		props: {
 			date: {
 				type: String,
 				default: ''
 			},
 			selected: {
+				type: Array,
+				default () {
+					return []
+				}
+			},
+			trip: {
 				type: Array,
 				default () {
 					return []
@@ -142,7 +165,7 @@
 				aniMaskShow: false
 			}
 		},
-		computed:{
+		computed: {
 			/**
 			 * for i18n
 			 */
@@ -183,18 +206,22 @@
 				// this.cale.setDate(newVal)
 				this.init(newVal)
 			},
-			startDate(val){
+			startDate(val) {
 				this.cale.resetSatrtDate(val)
 				this.cale.setDate(this.nowDate.fullDate)
 				this.weeks = this.cale.weeks
 			},
-			endDate(val){
+			endDate(val) {
 				this.cale.resetEndDate(val)
 				this.cale.setDate(this.nowDate.fullDate)
 				this.weeks = this.cale.weeks
 			},
 			selected(newVal) {
 				this.cale.setSelectInfo(this.nowDate.fullDate, newVal)
+				this.weeks = this.cale.weeks
+			},
+			trip(newVal) {
+				this.cale.setTripInfo(this.nowDate.fullDate, newVal)
 				this.weeks = this.cale.weeks
 			}
 		},
@@ -203,6 +230,7 @@
 			this.cale = new Calendar({
 				// date: new Date(),
 				selected: this.selected,
+				trip: this.trip,
 				startDate: this.startDate,
 				endDate: this.endDate,
 				range: this.range,
@@ -218,7 +246,7 @@
 			bindDateChange(e) {
 				const value = e.detail.value + '-1'
 				console.log(this.cale.getDate(value));
-				this.init(value)
+				this.setDate(value)
 			},
 			/**
 			 * 初始化日期显示
@@ -355,8 +383,27 @@
 				this.cale.setDate(date)
 				this.weeks = this.cale.weeks
 				this.nowDate = this.cale.getInfo(date)
+			},
+			/**
+			 * 计算月份的英语
+			 */
+			Month2Eng(month) {
+				const num = parseInt(month)
+
+				const monthList = t("month").split(",")
+				return monthList[num - 1];
+			},
+
+			scrollL() {
+				this.next()
+
+			},
+			scrollR() {
+				this.pre()
+
 			}
 		}
+
 	}
 </script>
 
@@ -369,6 +416,7 @@
 	$uni-text-color-placeholder: #808080;
 	$uni-color-subtitle: #555555;
 	$uni-text-color-grey:#999;
+
 	.uni-calendar {
 		/* #ifndef APP-NVUE */
 		display: flex;
@@ -425,7 +473,7 @@
 		display: flex;
 		/* #endif */
 		flex-direction: row;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
 		height: 50px;
 		border-bottom-color: $uni-border-color;
@@ -469,6 +517,8 @@
 		width: 100px;
 		font-size: $uni-font-size-base;
 		color: $uni-text-color;
+		margin-left: 10px;
+		color: rgba(0, 0, 0, 0.5)
 	}
 
 	.uni-calendar__header-btn-box {
@@ -529,7 +579,9 @@
 	}
 
 	.uni-calendar__weeks-day-text {
-		font-size: 14px;
+		font-size: 10px;
+		font-weight: bold;
+		color: #313b4a;
 	}
 
 	.uni-calendar__box {
@@ -558,5 +610,19 @@
 		/* #ifndef APP-NVUE */
 		line-height: 1;
 		/* #endif */
+	}
+
+	.pre-next-div {
+		width: 200rpx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.month-text {
+		font-size: 24px;
+		color: #000000;
+		font-weight: 600;
 	}
 </style>
